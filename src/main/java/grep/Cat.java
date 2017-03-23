@@ -8,9 +8,9 @@ import java.nio.file.Paths;
 /**
  * Created by SurfinBirb on 22.03.2017.
  */
-public class Grep {
+public class Cat {
 
-    public void grep(String path) throws IOException {
+    public void runCat(String path) throws IOException {
         Files.lines(Paths.get(path).toAbsolutePath(), StandardCharsets.UTF_8).forEach(this::cat);
     }
 

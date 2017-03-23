@@ -27,13 +27,13 @@ public class Console {
     public String path;
 
     public static void main(String[] args) throws CmdLineException, IOException {
-        new Console().grepLaunch(args);
+        new Console().catLaunch(args);
     }
 
-    private void grepLaunch(String[] args) throws CmdLineException, IOException {
+    private void catLaunch(String[] args) throws CmdLineException, IOException {
         CmdLineParser parser = new CmdLineParser(this);
-        Grep analysator = new Grep();
+        Cat catObj = new Cat();
         parser.parseArgument(args);
-        analysator.grep(path);
+        catObj.runCat(path);
     }
 }
