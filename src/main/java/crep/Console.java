@@ -1,4 +1,4 @@
-package grep;
+package crep;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -27,13 +27,13 @@ public class Console {
     public String path;
 
     public static void main(String[] args) throws CmdLineException, IOException {
-        new Console().catLaunch(args);
+        new Console().crepLaunch(args);
     }
 
-    private void catLaunch(String[] args) throws CmdLineException, IOException {
+    private void crepLaunch(String[] args) throws CmdLineException, IOException {
         CmdLineParser parser = new CmdLineParser(this);
-        Cat catObj = new Cat();
+        Crep crepObj = new Crep();
         parser.parseArgument(args);
-        catObj.runCat(path);
+        crepObj.runCrep(word,path,invert,ignore,regex);
     }
 }

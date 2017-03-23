@@ -1,4 +1,4 @@
-package grep;
+package crep;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -28,11 +28,22 @@ public class Crep {
     }
 
     private void compilePattern() {
-
+        if(regex){
+            if(ignore){
+                if(invert){this.pattern = Pattern.compile("!?(" + keyword + ")", Pattern.CASE_INSENSITIVE);}
+                this.pattern = Pattern.compile(keyword, Pattern.CASE_INSENSITIVE);
+            }
+            if(invert){this.pattern = Pattern.compile("!?(" + keyword + ")");}
+        }
+        if(!invert&&!ignore&&!regex) this.pattern = Pattern.compile(keyword);
     }
 
-    private void crep(String s){
-
+    private void crep(String s) {
+        if(!s.isEmpty()) {
+            Matcher matcher = pattern.matcher(s);
+            // NullPointerException???????????????????????????????????????????????????????????????????? ? ? ?
+            if (matcher.matches()) System.out.println(s);
+        }
     }
 
 }
