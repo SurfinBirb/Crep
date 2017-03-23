@@ -10,15 +10,15 @@ import java.util.regex.Pattern;
 /**
  * Created by SurfinBirb on 23.03.2017.
  */
-public class Crep {
+ class Crep {
 
     private String keyword;
-    private  boolean invert;
-    private  boolean ignore;
-    private  boolean regex;
+    private  boolean invert=false;
+    private  boolean ignore=false;
+    private  boolean regex=false;
     private Pattern pattern;
 
-    public void runCrep(String word, String path, boolean v, boolean i, boolean r) throws IOException {
+    void runCrep(String word, String path, boolean v, boolean i, boolean r) throws IOException {
         this.keyword = word;
         this.ignore = i;
         this.invert = v;
@@ -28,22 +28,18 @@ public class Crep {
     }
 
     private void compilePattern() {
-        if(regex){
-            if(ignore){
-                if(invert){this.pattern = Pattern.compile("!?(" + keyword + ")", Pattern.CASE_INSENSITIVE);}
-                this.pattern = Pattern.compile(keyword, Pattern.CASE_INSENSITIVE);
-            }
-            if(invert){this.pattern = Pattern.compile("!?(" + keyword + ")");}
-        }
-        if(!invert&&!ignore&&!regex) this.pattern = Pattern.compile(keyword);
+        if(ignore && invert && regex) pattern = Pattern.compile( "^((?!" + keyword + ").)*$", Pattern.CASE_INSENSITIVE );
+        if(ignore && invert && !regex) pattern = Pattern.compile( "^((?!" + keyword + ").)*$", Pattern.CASE_INSENSITIVE );
+        if(ignore &&! invert && !regex) pattern = Pattern.compile( ".*" + keyword + ".*", Pattern.CASE_INSENSITIVE );
+        if(ignore &&! invert && regex) pattern = Pattern.compile( ".*" + keyword + ".*", Pattern.CASE_INSENSITIVE );
+        if(!ignore && !invert && regex) pattern = Pattern.compile( ".*" + keyword + ".*" );
+        if(!ignore && invert && regex) pattern = Pattern.compile( "^((?!" + keyword + ").)*$" );
+        if(!ignore && invert && !regex) pattern = Pattern.compile( "^((?!" + keyword + ").)*$" );
+        if(!ignore &&! invert && !regex) pattern = Pattern.compile( ".*" + keyword + ".*" );
     }
 
     private void crep(String s) {
-        if(!s.isEmpty()) {
-            Matcher matcher = pattern.matcher(s);
-            // NullPointerException???????????????????????????????????????????????????????????????????? ? ? ?
+            Matcher matcher = this.pattern.matcher(s);
             if (matcher.matches()) System.out.println(s);
         }
-    }
-
 }

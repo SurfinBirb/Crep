@@ -11,20 +11,23 @@ import java.io.IOException;
  */
 public class Console {
 
+    @Argument(required = true, metaVar = "Command", usage = "Command")
+    public String command;
+
     @Option(name = "-v", metaVar = "Invert", usage = "Инвертировать условие фильтрации")
-    public boolean invert;
+    private boolean invert;
 
     @Option(name = "-i", metaVar = "Ignore", usage = "Игнорировать регистр")
-    public boolean ignore;
+    private boolean ignore;
 
     @Option(name = "-r", metaVar = "Regex", usage = "Использовать слово как регулярное выражение")
-    public boolean regex;
+    private boolean regex;
 
-    @Argument(required = true, metaVar = "word", usage = "Key word or regular expression")
-    public String word;
+    @Argument(required = true, metaVar = "word", index = 1, usage = "Key word or regular expression")
+    private String word;
 
-    @Argument(required = true, metaVar = "Path", index = 1, usage = "File path")
-    public String path;
+    @Argument(required = true, metaVar = "Path", index = 2, usage = "File path")
+    private String path;
 
     public static void main(String[] args) throws CmdLineException, IOException {
         new Console().crepLaunch(args);
@@ -34,6 +37,6 @@ public class Console {
         CmdLineParser parser = new CmdLineParser(this);
         Crep crepObj = new Crep();
         parser.parseArgument(args);
-        crepObj.runCrep(word,path,invert,ignore,regex);
+        crepObj.runCrep(word, path, invert, ignore, regex);
     }
 }
