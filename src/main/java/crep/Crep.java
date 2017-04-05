@@ -29,17 +29,19 @@ import java.util.regex.Pattern;
 
     private void compilePattern() {
         if(ignore && invert && regex) pattern = Pattern.compile( "^((?!" + keyword + ").)*$", Pattern.CASE_INSENSITIVE );
-        if(ignore && invert && !regex) pattern = Pattern.compile( "^((?!" + keyword + ").)*$", Pattern.CASE_INSENSITIVE );
-        if(ignore &&! invert && !regex) pattern = Pattern.compile( ".*" + keyword + ".*", Pattern.CASE_INSENSITIVE );
-        if(ignore &&! invert && regex) pattern = Pattern.compile( ".*" + keyword + ".*", Pattern.CASE_INSENSITIVE );
+        if(ignore && invert && !regex) pattern = Pattern.compile( "^((?!\\Q" + keyword + "\\E).)*$", Pattern.CASE_INSENSITIVE );
+        if(ignore && !invert && !regex) pattern = Pattern.compile( ".*\\Q" + keyword + "\\E.*", Pattern.CASE_INSENSITIVE );
+        if(ignore && !invert && regex) pattern = Pattern.compile( ".*" + keyword + ".*", Pattern.CASE_INSENSITIVE );
         if(!ignore && !invert && regex) pattern = Pattern.compile( ".*" + keyword + ".*" );
         if(!ignore && invert && regex) pattern = Pattern.compile( "^((?!" + keyword + ").)*$" );
-        if(!ignore && invert && !regex) pattern = Pattern.compile( "^((?!" + keyword + ").)*$" );
-        if(!ignore &&! invert && !regex) pattern = Pattern.compile( ".*" + keyword + ".*" );
+        if(!ignore && invert && !regex) pattern = Pattern.compile( "^((?!\\Q" + keyword + "\\E).)*$" );
+        if(!ignore && !invert && !regex) pattern = Pattern.compile( ".*\\Q" + keyword + "\\E.*" );
     }
 
     private void crep(String s) {
+        if(!s.equals("")) {
             Matcher matcher = this.pattern.matcher(s);
             if (matcher.matches()) System.out.println(s);
         }
+    }
 }
