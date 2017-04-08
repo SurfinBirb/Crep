@@ -44,4 +44,40 @@ import java.util.regex.Pattern;
             if (matcher.matches()) System.out.println(s);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Crep{ " +
+                "keyword = '" + keyword.toString() + '\'' +
+                ", invert = " + invert +
+                ", ignore = " + ignore +
+                ", regex = " + regex +
+                ", pattern = " + pattern.toString() +
+                " }";
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+
+        Crep downcastedOther = (Crep) other;
+
+        if (invert != downcastedOther.invert) return false;
+        if (ignore != downcastedOther.ignore) return false;
+        if (regex != downcastedOther.regex) return false;
+        if (!keyword.equals(downcastedOther.keyword)) return false;
+        if (!pattern.equals(downcastedOther.pattern)) return false;
+        else return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = keyword.hashCode();
+        result = 31 * result + (invert ? 1 : 0);
+        result = 31 * result + (ignore ? 1 : 0);
+        result = 31 * result + (regex ? 1 : 0);
+        result = 31 * result + pattern.hashCode();
+        return result;
+    }
 }
