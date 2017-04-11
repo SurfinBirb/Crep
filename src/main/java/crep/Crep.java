@@ -12,22 +12,13 @@ import java.util.regex.Pattern;
  */
  class Crep {
 
-    private String keyword;
-    private  boolean invert=false;
-    private  boolean ignore=false;
-    private  boolean regex=false;
-    private Pattern pattern;
+    private static String keyword;
+    private static boolean invert = false;
+    private static boolean ignore = false;
+    private static boolean regex = false;
+    private static Pattern pattern;
 
-    void runCrep(String word, String path, boolean v, boolean i, boolean r) throws IOException {
-        this.keyword = word;
-        this.ignore = i;
-        this.invert = v;
-        this.regex = r;
-        this.compilePattern();
-        Files.lines(Paths.get(path).toAbsolutePath(), StandardCharsets.UTF_8).forEach(this::crep);
-    }
-
-    private void compilePattern() {
+    private static void compilePattern() {
         if(ignore && invert && regex) pattern = Pattern.compile( "^((?!" + keyword + ").)*$", Pattern.CASE_INSENSITIVE );
         if(ignore && invert && !regex) pattern = Pattern.compile( "^((?!\\Q" + keyword + "\\E).)*$", Pattern.CASE_INSENSITIVE );
         if(ignore && !invert && !regex) pattern = Pattern.compile( ".*\\Q" + keyword + "\\E.*", Pattern.CASE_INSENSITIVE );
@@ -38,46 +29,19 @@ import java.util.regex.Pattern;
         if(!ignore && !invert && !regex) pattern = Pattern.compile( ".*\\Q" + keyword + "\\E.*" );
     }
 
-    private void crep(String s) {
-        if(!s.equals("")) {
-            Matcher matcher = this.pattern.matcher(s);
-            if (matcher.matches()) System.out.println(s);
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "Crep{ " +
-                "keyword = '" + keyword.toString() + '\'' +
-                ", invert = " + invert +
-                ", ignore = " + ignore +
-                ", regex = " + regex +
-                ", pattern = " + pattern.toString() +
-                " }";
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (other == null || getClass() != other.getClass()) return false;
-
-        Crep downcastedOther = (Crep) other;
-
-        if (invert != downcastedOther.invert) return false;
-        if (ignore != downcastedOther.ignore) return false;
-        if (regex != downcastedOther.regex) return false;
-        if (!keyword.equals(downcastedOther.keyword)) return false;
-        if (!pattern.equals(downcastedOther.pattern)) return false;
-        else return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = keyword.hashCode();
-        result = 31 * result + (invert ? 1 : 0);
-        result = 31 * result + (ignore ? 1 : 0);
-        result = 31 * result + (regex ? 1 : 0);
-        result = 31 * result + pattern.hashCode();
-        return result;
+    static void runCrep(String word, String path, boolean v, boolean i, boolean r) throws IOException {
+        keyword = word;
+        ignore = i;
+        invert = v;
+        regex = r;
+        compilePattern();
+        Files.lines(Paths.get(path).toAbsolutePath(), StandardCharsets.UTF_8).forEach(
+                s -> {
+                    if(!s.equals("")) {
+                        Matcher matcher = pattern.matcher(s);
+                        if (matcher.matches()) System.out.println(s);
+                    }
+                }
+        );
     }
 }
