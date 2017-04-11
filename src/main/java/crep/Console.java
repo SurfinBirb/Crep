@@ -37,19 +37,39 @@ public class Console {
     }
 
     private void crepLaunch(String[] args) throws CmdLineException, IOException {
+
+        boolean wrongOption = false;
+        boolean tooMuchArgs = false;
+        int argsCounter = 0;
         CmdLineParser parser = new CmdLineParser(this);
-        parser.parseArgument(args);
-        if (command.equals("help")) printHelp();
-        else {
-            if (command.equals("crep") && path != null && word != null) {
-                if (Paths.get(path).toAbsolutePath().toFile().exists()) runCrep(word, path, invert, ignore, regex);
-                else {
-                    System.out.println(Paths.get(path).toAbsolutePath() + " - No such file or directory");
+
+        for(String token: args){
+            if (token.matches("(-).")) {
+                if (!(token.endsWith("v")||token.endsWith("i")||token.endsWith("r"))) wrongOption = true;
+            }
+            else {
+                argsCounter++;
+                if (argsCounter > 3) tooMuchArgs = true;
+            }
+        }
+
+        if (tooMuchArgs || wrongOption) {
+            System.out.println("Too much args or wrong options");
+            printHelp();
+        } else {
+            parser.parseArgument(args);
+            if (command.equals("help")) printHelp();
+            else {
+                if (command.equals("crep") && path != null && word != null) {
+                    if (Paths.get(path).toAbsolutePath().toFile().exists()) runCrep(word, path, invert, ignore, regex);
+                    else {
+                        System.out.println(Paths.get(path).toAbsolutePath() + " - No such file or directory");
+                        printHelp();
+                    }
+                } else {
+                    System.out.println("Bad command line args!");
                     printHelp();
                 }
-            } else {
-                System.out.println("Bad command line args!");
-                printHelp();
             }
         }
     }
